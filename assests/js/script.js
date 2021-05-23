@@ -2,6 +2,7 @@
 var timerEl = document.getElementById("timeLeft")
 var startBtn = document.getElementById("start")
 var questionEl = document.getElementById("main")
+var scoreEl = document.getElementById("main")
 console.log(startBtn);
 
 var timeLeft = 54;
@@ -50,7 +51,7 @@ var questions = [
     }
 ];
 
-questionindex = 0
+questionindex = 0;
 
 // starts the quiz
 function startQuiz () {
@@ -58,71 +59,99 @@ function startQuiz () {
     displayquestion ();
 }
 
+//timer function
+function countdown() {
+    
+    var interval = setInterval(function() {
+        if (questionindex < 5 && timeLeft > 0) {
+            timerEl.textContent = "Time: " + timeLeft;
+            timeLeft--;
+        } else if (timeLeft === 1) {
+            timerEl.textContent = "Time: " + timeLeft;
+            timeLeft--;
+        } else {
+            timerEl.textContent = "Time: " + timeLeft;
+            clearInterval(interval);
+            score();
+        }
+    }, 1000);
+}
+
 // displays question function
 function displayquestion () {
-    document.getElementById("main").innerHTML = '';
+    if (questionindex < 5) {
+        document.getElementById("main").innerHTML = '';
 
-    var current = questions[questionindex];
+        var current = questions[questionindex];
 
-    var question = document.createElement("h2");
-    question.textContent = current.question;
-    questionEl.appendChild(question);
-    
-    var a = document.createElement("p");
-    a.textContent = current.a;
-    questionEl.appendChild(a);
+        var question = document.createElement("h2");
+        question.textContent = current.question;
+        questionEl.appendChild(question);
+        
+        var a = document.createElement("p");
+        a.textContent = current.a;
+        questionEl.appendChild(a);
 
-    var b = document.createElement("p");
-    b.textContent = current.b;
-    questionEl.appendChild(b);
+        var b = document.createElement("p");
+        b.textContent = current.b;
+        questionEl.appendChild(b);
 
-    var c = document.createElement("p")
-    c.textContent = current.c;
-    questionEl.appendChild(c);
+        var c = document.createElement("p")
+        c.textContent = current.c;
+        questionEl.appendChild(c);
 
-    var d = document.createElement("p")
-    d.textContent = current.d;
-    questionEl.appendChild(d);
+        var d = document.createElement("p")
+        d.textContent = current.d;
+        questionEl.appendChild(d);
 
-    a.addEventListener("click", anwserCheck)
-    b.addEventListener("click", anwserCheck)
-    c.addEventListener("click", anwserCheck)
-    d.addEventListener("click", anwserCheck)
+        a.addEventListener("click", anwserCheck)
+        b.addEventListener("click", anwserCheck)
+        c.addEventListener("click", anwserCheck)
+        d.addEventListener("click", anwserCheck)
+    } else {
+        score();
+    }
+
 }
 
 // answer check function
-function anwserCheck () {
+function anwserCheck() {
     console.log(this)
     if (questions[questionindex].answer === this.textContent ) {
     console.log("correct");
     questionindex ++;
+    console.log(questionindex);
     displayquestion();
     } else {
         console.log("incorrect");
         questionindex ++;
+        console.log(questionindex);
         timeLeft -= 10;
         displayquestion();
     }
 }
 
-//timer function
-function countdown() {
-    
-    var interval = setInterval(function() {
-        if (timeLeft > 1) {
-            timerEl.textContent = "Time: " + timeLeft;
-            timeLeft--;
-            console.log(timeLeft);
-        } else if (timeLeft === 1) {
-            timerEl.textContent = "Time: " + timeLeft;
-            timeLeft--;
-        } else {
-            timerEl.textContent = "Time: 0";
-            alert("You Ran Out of Time");
-            clearInterval(interval);
-        }
-    }, 1000);
+// Score Page
+function score() {
+    document.getElementById("main").innerHTML = '';
+
+    var scoreText = document.createElement('h3');
+    scoreText.innerHTML = "Score: " + timeLeft;
+    scoreEl.appendChild(scoreText);
+    if (timeLeft < 0) {
+        scoreText.innerHTML = "Score: 0"
+        timeLeft = 0
+    }
+
+    var initial = document.createElement('input');
+    scoreEl.appendChild(initial);
+
+    var submit = document.createElement('button');
+    submit.innerHTML = "Submit";
+    scoreEl.appendChild(submit);
+
 }
+
 
 // Start Button
 startBtn.onclick = startQuiz;
