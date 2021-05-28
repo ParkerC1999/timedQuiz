@@ -1,8 +1,9 @@
 //timer elements
-var timerEl = document.getElementById("timeLeft")
-var startBtn = document.getElementById("start")
-var questionEl = document.getElementById("main")
-var scoreEl = document.getElementById("main")
+var timerEl = document.getElementById("timeLeft");
+var startBtn = document.getElementById("start");
+var questionEl = document.getElementById("main");
+var scoreEl = document.getElementById("main");
+var initial = null;
 console.log(startBtn);
 
 var timeLeft = 54;
@@ -111,7 +112,11 @@ function displayquestion () {
     } else {
         score();
     }
+}
 
+// Display Highscores
+function displayHighScores() {
+    
 }
 
 // answer check function
@@ -143,14 +148,50 @@ function score() {
         timeLeft = 0
     }
 
-    var initial = document.createElement('input');
+    initial = document.createElement('input');
     scoreEl.appendChild(initial);
 
     var submit = document.createElement('button');
     submit.innerHTML = "Submit";
     scoreEl.appendChild(submit);
 
+    submit.onclick = saveScore;
+
 }
+
+// Save Score and Name
+function saveScore() {
+    var userscore = {
+        name: initial.value,
+        fs: timeLeft
+    }
+    highscores.push(userscore);
+    window.localStorage.setItem("highscores", JSON.stringify(highscores));
+    console.log("This is saved!");
+    console.log(initial, timeLeft);
+    document.getElementById("main").innerHTML = '';
+    timeLeft = 55;
+    questionindex = 0;
+}
+
+
+// Load Score and Name
+var viewscore = document.querySelector(".highScore");
+viewscore.addEventListener("click", loadScore);
+function loadScore() {
+    for (var i = 0; i < highscores.length; i++) {
+        var n = document.createElement("h4");
+
+        var currentHighscore = highscores[i];
+
+        n.textContent = currentHighscore.name + " - " + currentHighscore.fs;
+
+        scoreEl.appendChild(n);
+    }
+}
+
+// Highscores
+var highscores = JSON.parse(localStorage.getItem("highscores")) || [];
 
 
 // Start Button
