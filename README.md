@@ -14,7 +14,10 @@ The final score reflects how much time remains by the end of the quiz. Users at 
 * JavaScript
 
 ## Website Link
+https://parkerc1999.github.io/timedQuiz/
 
+## Screenshot
+![Website Screenshot](/assests/Screenshot/timedQuiz_screenshot.PNG)
 
 ## Created By:
 Parker Christiansen
